@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
-    "test:cov": "vitest run --coverage.enabled --coverage.provider=v8 --coverage.reporter=cobertura --coverage.reporter=text",
+    "test:cov": "vitest run --coverage --pool=threads --maxWorkers=1 --no-file-parallelism",
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",
     "cy:open": "cypress open",
@@ -20,7 +20,8 @@
   },
   "dependencies": {
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.18.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
