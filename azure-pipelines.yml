@@ -10,7 +10,7 @@ variables:
   - name: REGISTRY
     value: 'ghcr.io'
   - name: GITHUB_ACTOR
-    value: 'pmanavella'
+    value: 'vsponton'
   - name: DEPLOY_RENDER
     value: 'true'
   - group: SONAR_TOKEN
@@ -39,8 +39,8 @@ stages:
           displayName: 'Sonar • Prepare'
           inputs:
             SonarCloud: 'SonarCloud'
-            organization: 'pmanavella'
-            projectKey: 'FINAL-IS3'
+            organization: 'vsponton'
+            projectKey: 'vsponton_FINAL-IS3'
             scannerMode: 'CLI'
             configMode: 'file'
 
