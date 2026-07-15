@@ -6,7 +6,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Herramientas de compilación necesarias para node-gyp (sqlite3)
-RUN apk add --no-cache python3 make g++
+RUN apk add --no-cache g++ make python3
 
 COPY package*.json ./
 

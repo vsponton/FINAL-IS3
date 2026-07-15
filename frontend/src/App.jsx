@@ -292,81 +292,85 @@ function App() {
     if (books.length === 0) {
       return <div style={{ padding: "0.75rem" }}>No hay libros cargados.</div>;
     }
-    return books.map((book) => (
-      <div
-        key={book.id}
-        style={{
-          display: "grid",
-          gridTemplateColumns: "60px 2fr 2fr 80px 80px 260px",
-          padding: "0.75rem",
-          borderTop: "1px solid #e5e7eb",
-          alignItems: "center",
-          backgroundColor: "rgba(255,255,255,0.75)",
-        }}
-      >
-        <div>{book.id}</div>
-        <div>{book.title}</div>
-        <div>{book.author}</div>
-        <div>{book.year}</div>
-        <div>{book.stock}</div>
-
-        <div
-          style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}
-        >
-          <button
-            onClick={() => handleEdit(book)}
+    return (
+      <>
+        {books.map((book) => (
+          <div
+            key={book.id}
             style={{
-              padding: "0.25rem 0.75rem",
-              border: "1px solid #e5e7eb",
-              cursor: "pointer",
-              backgroundColor: "white",
-              borderRadius: "6px",
+              display: "grid",
+              gridTemplateColumns: "60px 2fr 2fr 80px 80px 260px",
+              padding: "0.75rem",
+              borderTop: "1px solid #e5e7eb",
+              alignItems: "center",
+              backgroundColor: "rgba(255,255,255,0.75)",
             }}
           >
-            Editar
-          </button>
+            <div>{book.id}</div>
+            <div>{book.title}</div>
+            <div>{book.author}</div>
+            <div>{book.year}</div>
+            <div>{book.stock}</div>
 
-          <button
-            onClick={() => handleDelete(book.id)}
-            style={{
-              padding: "0.25rem 0.75rem",
-              border: "1px solid #fee2e2",
-              cursor: "pointer",
-              backgroundColor: "#fee2e2",
-              borderRadius: "6px",
-            }}
-          >
-            Borrar
-          </button>
+            <div
+              style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}
+            >
+              <button
+                onClick={() => handleEdit(book)}
+                style={{
+                  padding: "0.25rem 0.75rem",
+                  border: "1px solid #e5e7eb",
+                  cursor: "pointer",
+                  backgroundColor: "white",
+                  borderRadius: "6px",
+                }}
+              >
+                Editar
+              </button>
 
-          <button
-            onClick={() => handleLoan(book)}
-            style={{
-              padding: "0.25rem 0.75rem",
-              border: "1px solid #e0f2fe",
-              cursor: "pointer",
-              backgroundColor: "#e0f2fe",
-              borderRadius: "6px",
-            }}
-          >
-            Prestar
-          </button>
+              <button
+                onClick={() => handleDelete(book.id)}
+                style={{
+                  padding: "0.25rem 0.75rem",
+                  border: "1px solid #fee2e2",
+                  cursor: "pointer",
+                  backgroundColor: "#fee2e2",
+                  borderRadius: "6px",
+                }}
+              >
+                Borrar
+              </button>
 
-          <button
-            onClick={() => handleSell(book)}
-            style={{
-              padding: "0.25rem 0.75rem",
-              border: "1px solid #dcfce7",
-              cursor: "pointer",
-              backgroundColor: "#dcfce7",
-              borderRadius: "6px",
-            }}
-          >
-            Vender
-          </button>
-        </div>
-      </div>
-    ));
+              <button
+                onClick={() => handleLoan(book)}
+                style={{
+                  padding: "0.25rem 0.75rem",
+                  border: "1px solid #e0f2fe",
+                  cursor: "pointer",
+                  backgroundColor: "#e0f2fe",
+                  borderRadius: "6px",
+                }}
+              >
+                Prestar
+              </button>
+
+              <button
+                onClick={() => handleSell(book)}
+                style={{
+                  padding: "0.25rem 0.75rem",
+                  border: "1px solid #dcfce7",
+                  cursor: "pointer",
+                  backgroundColor: "#dcfce7",
+                  borderRadius: "6px",
+                }}
+              >
+                Vender
+              </button>
+            </div>
+          </div>
+        ))}
+      </>
+    );
   };
 
   const renderLoansContent = () => {
@@ -376,29 +380,33 @@ function App() {
     if (loans.length === 0) {
       return <div style={{ padding: "0.75rem" }}>No hay préstamos registrados.</div>;
     }
-    return loans.map((loan) => (
-      <div
-        key={loan.id}
-        style={{
-          display: "grid",
-          gridTemplateColumns: "60px 2fr 2fr 2fr 140px 120px",
-          padding: "0.75rem",
-          borderTop: "1px solid #e5e7eb",
-          backgroundColor: "rgba(255,255,255,0.9)",
-          fontSize: "0.9rem",
-        }}
-      >
-        <div>{loan.id}</div>
-        <div>{loan.book_title}</div>
-        <div>{loan.borrower_name}</div>
-        <div>{loan.borrower_email || "-"}</div>
-        <div>
-          {new Date(loan.start_date).toLocaleDateString()}{" "}
-          {"→"} {new Date(loan.due_date).toLocaleDateString()}
-        </div>
-        <div>{loan.status}</div>
-      </div>
-    ));
+    return (
+      <>
+        {loans.map((loan) => (
+          <div
+            key={loan.id}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "60px 2fr 2fr 2fr 140px 120px",
+              padding: "0.75rem",
+              borderTop: "1px solid #e5e7eb",
+              backgroundColor: "rgba(255,255,255,0.9)",
+              fontSize: "0.9rem",
+            }}
+          >
+            <div>{loan.id}</div>
+            <div>{loan.book_title}</div>
+            <div>{loan.borrower_name}</div>
+            <div>{loan.borrower_email || "-"}</div>
+            <div>
+              {new Date(loan.start_date).toLocaleDateString()}{" "}
+              {"→"} {new Date(loan.due_date).toLocaleDateString()}
+            </div>
+            <div>{loan.status}</div>
+          </div>
+        ))}
+      </>
+    );
   };
 
   const renderSalesContent = () => {
@@ -408,29 +416,33 @@ function App() {
     if (sales.length === 0) {
       return <div style={{ padding: "0.75rem" }}>No hay ventas registradas.</div>;
     }
-    return sales.map((sale) => (
-      <div
-        key={sale.id}
-        style={{
-          display: "grid",
-          gridTemplateColumns: "60px 2fr 2fr 80px 120px 140px",
-          padding: "0.75rem",
-          borderTop: "1px solid #e5e7eb",
-          backgroundColor: "rgba(255,255,255,0.9)",
-          fontSize: "0.9rem",
-        }}
-      >
-        <div>{sale.id}</div>
-        <div>{sale.book_title}</div>
-        <div>{sale.buyer_name}</div>
-        <div>{sale.quantity}</div>
-        <div>${sale.total_price}</div>
-        <div>
-          {new Date(sale.sale_date).toLocaleDateString()}{" "}
-          {new Date(sale.sale_date).toLocaleTimeString()}
-        </div>
-      </div>
-    ));
+    return (
+      <>
+        {sales.map((sale) => (
+          <div
+            key={sale.id}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "60px 2fr 2fr 80px 120px 140px",
+              padding: "0.75rem",
+              borderTop: "1px solid #e5e7eb",
+              backgroundColor: "rgba(255,255,255,0.9)",
+              fontSize: "0.9rem",
+            }}
+          >
+            <div>{sale.id}</div>
+            <div>{sale.book_title}</div>
+            <div>{sale.buyer_name}</div>
+            <div>{sale.quantity}</div>
+            <div>${sale.total_price}</div>
+            <div>
+              {new Date(sale.sale_date).toLocaleDateString()}{" "}
+              {new Date(sale.sale_date).toLocaleTimeString()}
+            </div>
+          </div>
+        ))}
+      </>
+    );
   };
 
   // =================== RENDER ===================
