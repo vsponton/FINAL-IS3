@@ -6,6 +6,19 @@ const BOOKS_URL = `${API_BASE}/api/books`;
 const LOANS_URL = `${API_BASE}/api/loans`;
 const SALES_URL = `${API_BASE}/api/sales`;
 
+/**
+ * Valida que `id` sea un entero positivo antes de incluirlo en una URL.
+ * Lanza Error si el valor no es un entero mayor que cero.
+ * Resuelve el issue de Sonar: "URL construida con identificador no validado".
+ */
+function parseBookId(id) {
+  const n = Number(id);
+  if (!Number.isInteger(n) || n <= 0) {
+    throw new Error(`ID de libro inválido: ${id}`);
+  }
+  return n;
+}
+
 function App() {
   const [books, setBooks] = useState([]);
   const [form, setForm] = useState({
@@ -133,7 +146,7 @@ function App() {
         const newBook = await res.json();
         setBooks((prev) => [newBook, ...prev]);
       } else {
-        const res = await fetch(`${BOOKS_URL}/${form.id}`, {
+        const res = await fetch(`${BOOKS_URL}/${parseBookId(form.id)}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
@@ -172,7 +185,7 @@ function App() {
     if (!confirm("¿Eliminar este libro?")) return;
 
     try {
-      const res = await fetch(`${BOOKS_URL}/${id}`, { method: "DELETE" });
+      const res = await fetch(`${BOOKS_URL}/${parseBookId(id)}`, { method: "DELETE" });
       if (!res.ok && res.status !== 204) {
         const err = await res.json().catch(() => ({}));
         alert(err.error || "Error al eliminar libro");
@@ -209,7 +222,7 @@ function App() {
     );
 
     try {
-      const res = await fetch(`${API_BASE}/api/books/${book.id}/loan`, {
+      const res = await fetch(`${API_BASE}/api/books/${parseBookId(book.id)}/loan`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -263,7 +276,7 @@ function App() {
 
   // helper para vender (evita repetir la URL base)
   const resFetchSell = (id, body) =>
-    fetch(`${API_BASE}/api/books/${id}/sell`, {
+    fetch(`${API_BASE}/api/books/${parseBookId(id)}/sell`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),

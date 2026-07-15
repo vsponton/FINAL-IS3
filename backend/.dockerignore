@@ -1,0 +1,33 @@
+# Control de versiones
+.git
+.gitignore
+.github
+
+# Variables de entorno (nunca deben entrar al contenedor)
+.env
+.env.*
+
+# Dependencias del host (se instalan dentro del contenedor con npm ci)
+node_modules
+
+# Cobertura y resultados de test
+coverage
+test-results
+
+# Tests (no son necesarios en producción)
+__tests__
+
+# Archivos de base de datos local (SQLite)
+# En producción se usa MySQL; el archivo sqlite no debe copiarse al contenedor.
+*.sqlite
+libreria.sqlite
+
+# Archivos temporales y de sistema
+*.md
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
