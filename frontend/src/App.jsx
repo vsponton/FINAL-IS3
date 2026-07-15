@@ -297,6 +297,7 @@ function App() {
         {books.map((book) => (
           <div
             key={book.id}
+            data-cy="book-row"
             style={{
               display: "grid",
               gridTemplateColumns: "60px 2fr 2fr 80px 80px 260px",
@@ -667,6 +668,7 @@ function App() {
               <input
                 id="title"
                 name="title"
+                data-cy="book-title"
                 value={form.title}
                 onChange={handleChange}
                 style={{
@@ -690,6 +692,7 @@ function App() {
               <input
                 id="author"
                 name="author"
+                data-cy="book-author"
                 value={form.author}
                 onChange={handleChange}
                 style={{
@@ -714,6 +717,7 @@ function App() {
                 id="year"
                 name="year"
                 type="number"
+                data-cy="book-year"
                 value={form.year}
                 onChange={handleChange}
                 style={{
@@ -738,6 +742,7 @@ function App() {
                 id="stock"
                 name="stock"
                 type="number"
+                data-cy="book-stock"
                 value={form.stock}
                 onChange={handleChange}
                 style={{
@@ -763,6 +768,7 @@ function App() {
                 name="price"
                 type="number"
                 step="0.01"
+                data-cy="book-price"
                 value={form.price}
                 onChange={handleChange}
                 style={{
@@ -779,6 +785,7 @@ function App() {
             <div style={{ gridColumn: "1 / -1", display: "flex", gap: "0.5rem" }}>
               <button
                 type="submit"
+                data-cy="book-submit"
                 style={{
                   padding: "0.5rem 1rem",
                   border: "none",
