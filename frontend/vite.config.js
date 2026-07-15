@@ -1,4 +1,4 @@
-/// <reference types="vitest" />
+﻿/// <reference types="vitest" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -13,6 +13,10 @@ export default defineConfig({
       forks: {
         singleFork: true,
       },
+    },
+    reporters: ['default', 'junit'],
+    outputFile: {
+      junit: './test-results/junit.xml',
     },
     coverage: {
       provider: 'v8',

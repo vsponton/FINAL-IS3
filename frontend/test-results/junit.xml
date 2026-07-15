@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="60" failures="0" errors="0" time="1.4945853">
+    <testsuite name="src/__tests__/a11y.test.jsx" timestamp="2026-07-15T04:36:10.756Z" hostname="Victoria" tests="4" failures="0" errors="0" skipped="0" time="0.0287081">
+        <testcase classname="src/__tests__/a11y.test.jsx" name="aria-label presente" time="0.0177796">
+        </testcase>
+        <testcase classname="src/__tests__/a11y.test.jsx" name="role button" time="0.0067606">
+        </testcase>
+        <testcase classname="src/__tests__/a11y.test.jsx" name="texto visible" time="0.0017256">
+        </testcase>
+        <testcase classname="src/__tests__/a11y.test.jsx" name="no hay alert al inicio" time="0.000896">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/__tests__/api.test.js" timestamp="2026-07-15T04:36:10.761Z" hostname="Victoria" tests="1" failures="0" errors="0" skipped="0" time="0.0025364">
+        <testcase classname="src/__tests__/api.test.js" name="API exporta funciones" time="0.0015429">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/__tests__/app.filters.test.jsx" timestamp="2026-07-15T04:36:10.762Z" hostname="Victoria" tests="6" failures="0" errors="0" skipped="0" time="0.4143836">
+        <testcase classname="src/__tests__/app.filters.test.jsx" name="App filters and views &gt; cambia a Préstamos y carga lista" time="0.133541">
+        </testcase>
+        <testcase classname="src/__tests__/app.filters.test.jsx" name="App filters and views &gt; cambia a Ventas y carga lista" time="0.0639879">
+        </testcase>
+        <testcase classname="src/__tests__/app.filters.test.jsx" name="App filters and views &gt; error cargando préstamos alerta" time="0.0535772">
+        </testcase>
+        <testcase classname="src/__tests__/app.filters.test.jsx" name="App filters and views &gt; error cargando ventas alerta" time="0.0619403">
+        </testcase>
+        <testcase classname="src/__tests__/app.filters.test.jsx" name="App filters and views &gt; orden por título ascendente arma sort=title_asc" time="0.0554899">
+        </testcase>
+        <testcase classname="src/__tests__/app.filters.test.jsx" name="App filters and views &gt; filtro de stock mínimo arma minStock" time="0.044516">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/__tests__/app.flows.test.jsx" timestamp="2026-07-15T04:36:10.764Z" hostname="Victoria" tests="10" failures="0" errors="0" skipped="0" time="0.6382829">
+        <testcase classname="src/__tests__/app.flows.test.jsx" name="App flows &gt; muestra vacío cuando no hay libros" time="0.0974876">
+        </testcase>
+        <testcase classname="src/__tests__/app.flows.test.jsx" name="App flows &gt; alerta si falla carga de libros" time="0.0183658">
+        </testcase>
+        <testcase classname="src/__tests__/app.flows.test.jsx" name="App flows &gt; aplica filtros y llama con querystring" time="0.0515317">
+        </testcase>
+        <testcase classname="src/__tests__/app.flows.test.jsx" name="App flows &gt; limpia filtros y vuelve a la url base" time="0.0565427">
+        </testcase>
+        <testcase classname="src/__tests__/app.flows.test.jsx" name="App flows &gt; crea libro con formulario" time="0.1115566">
+        </testcase>
+        <testcase classname="src/__tests__/app.flows.test.jsx" name="App flows &gt; no envía si faltan campos requeridos" time="0.05062">
+        </testcase>
+        <testcase classname="src/__tests__/app.flows.test.jsx" name="App flows &gt; edita libro existente" time="0.0997573">
+        </testcase>
+        <testcase classname="src/__tests__/app.flows.test.jsx" name="App flows &gt; borra libro tras confirmar" time="0.0531444">
+        </testcase>
+        <testcase classname="src/__tests__/app.flows.test.jsx" name="App flows &gt; registra préstamo" time="0.0505644">
+        </testcase>
+        <testcase classname="src/__tests__/app.flows.test.jsx" name="App flows &gt; registra venta" time="0.0472791">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/__tests__/App.test.jsx" timestamp="2026-07-15T04:36:10.766Z" hostname="Victoria" tests="3" failures="0" errors="0" skipped="0" time="0.2013869">
+        <testcase classname="src/__tests__/App.test.jsx" name="App &gt; renderiza título y tabla con datos" time="0.0841379">
+        </testcase>
+        <testcase classname="src/__tests__/App.test.jsx" name="App &gt; aplica búsqueda por texto" time="0.0868681">
+        </testcase>
+        <testcase classname="src/__tests__/App.test.jsx" name="App (crear) &gt; agrega libro (verifica POST con payload correcto)" time="0.0290625">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/__tests__/BookForm.test.jsx" timestamp="2026-07-15T04:36:10.767Z" hostname="Victoria" tests="12" failures="0" errors="0" skipped="0" time="0.0530983">
+        <testcase classname="src/__tests__/BookForm.test.jsx" name="render básico" time="0.0210915">
+        </testcase>
+        <testcase classname="src/__tests__/BookForm.test.jsx" name="validaciones t=&quot;&quot; a=&quot;A&quot; -&gt; Título requerido" time="0.0107382">
+        </testcase>
+        <testcase classname="src/__tests__/BookForm.test.jsx" name="validaciones t=&quot;  &quot; a=&quot;AB&quot; -&gt; Título requerido" time="0.0024994">
+        </testcase>
+        <testcase classname="src/__tests__/BookForm.test.jsx" name="validaciones t=&quot;El&quot; a=&quot;A&quot; -&gt; Autor muy corto" time="0.0022918">
+        </testcase>
+        <testcase classname="src/__tests__/BookForm.test.jsx" name="submit OK El principito - Antoine" time="0.0038284">
+        </testcase>
+        <testcase classname="src/__tests__/BookForm.test.jsx" name="submit OK Clean Code - Martin" time="0.0016944">
+        </testcase>
+        <testcase classname="src/__tests__/BookForm.test.jsx" name="submit OK 1984 - Orwell" time="0.0014553">
+        </testcase>
+        <testcase classname="src/__tests__/BookForm.test.jsx" name="submit OK Dune - Herbert" time="0.0015532">
+        </testcase>
+        <testcase classname="src/__tests__/BookForm.test.jsx" name="submit OK Ficciones - Borges" time="0.0017295">
+        </testcase>
+        <testcase classname="src/__tests__/BookForm.test.jsx" name="submit OK Rayuela - Cortázar" time="0.001576">
+        </testcase>
+        <testcase classname="src/__tests__/BookForm.test.jsx" name="submit OK It - Stephen King" time="0.0015683">
+        </testcase>
+        <testcase classname="src/__tests__/BookForm.test.jsx" name="submit OK Neuromancer - Gibson" time="0.0018781">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/__tests__/BooksList.test.jsx" timestamp="2026-07-15T04:36:10.768Z" hostname="Victoria" tests="8" failures="0" errors="0" skipped="0" time="0.040814">
+        <testcase classname="src/__tests__/BooksList.test.jsx" name="muestra vacío" time="0.0170474">
+        </testcase>
+        <testcase classname="src/__tests__/BooksList.test.jsx" name="renderiza 1 items" time="0.0055417">
+        </testcase>
+        <testcase classname="src/__tests__/BooksList.test.jsx" name="renderiza 2 items" time="0.002401">
+        </testcase>
+        <testcase classname="src/__tests__/BooksList.test.jsx" name="renderiza 3 items" time="0.0028795">
+        </testcase>
+        <testcase classname="src/__tests__/BooksList.test.jsx" name="renderiza 4 items" time="0.0026331">
+        </testcase>
+        <testcase classname="src/__tests__/BooksList.test.jsx" name="renderiza 5 items" time="0.00244">
+        </testcase>
+        <testcase classname="src/__tests__/BooksList.test.jsx" name="renderiza 6 items" time="0.0029468">
+        </testcase>
+        <testcase classname="src/__tests__/BooksList.test.jsx" name="renderiza 7 items" time="0.0036254">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/__tests__/cypress-config.test.js" timestamp="2026-07-15T04:36:10.769Z" hostname="Victoria" tests="1" failures="0" errors="0" skipped="0" time="0.002061">
+        <testcase classname="src/__tests__/cypress-config.test.js" name="SonarCloud frontend dummy test &gt; dummy ok" time="0.0010557">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/__tests__/main.test.jsx" timestamp="2026-07-15T04:36:10.770Z" hostname="Victoria" tests="1" failures="0" errors="0" skipped="0" time="0.0846523">
+        <testcase classname="src/__tests__/main.test.jsx" name="bootstrap monta en #root" time="0.0834473">
+            <system-err>
+An update to Root inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() =&gt; {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you&apos;re testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+            </system-err>
+        </testcase>
+    </testsuite>
+    <testsuite name="src/__tests__/routing.test.jsx" timestamp="2026-07-15T04:36:10.770Z" hostname="Victoria" tests="3" failures="0" errors="0" skipped="0" time="0.0234415">
+        <testcase classname="src/__tests__/routing.test.jsx" name="home" time="0.0194143">
+        </testcase>
+        <testcase classname="src/__tests__/routing.test.jsx" name="ruta /books" time="0.0014699">
+        </testcase>
+        <testcase classname="src/__tests__/routing.test.jsx" name="404" time="0.0012231">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/__tests__/services.api.test.js" timestamp="2026-07-15T04:36:10.771Z" hostname="Victoria" tests="11" failures="0" errors="0" skipped="0" time="0.0052203">
+        <testcase classname="src/__tests__/services.api.test.js" name="API client &gt; list OK" time="0.0014309">
+        </testcase>
+        <testcase classname="src/__tests__/services.api.test.js" name="API client &gt; create OK" time="0.0001782">
+        </testcase>
+        <testcase classname="src/__tests__/services.api.test.js" name="API client &gt; update OK" time="0.0001312">
+        </testcase>
+        <testcase classname="src/__tests__/services.api.test.js" name="API client &gt; remove OK" time="0.0001132">
+        </testcase>
+        <testcase classname="src/__tests__/services.api.test.js" name="API client &gt; create 422" time="0.0014323">
+        </testcase>
+        <testcase classname="src/__tests__/services.api.test.js" name="API client &gt; update 404" time="0.0001879">
+        </testcase>
+        <testcase classname="src/__tests__/services.api.test.js" name="API client &gt; remove 409" time="0.0002164">
+        </testcase>
+        <testcase classname="src/__tests__/services.api.test.js" name="API client &gt; headers básicos GET /api/books" time="0.0001439">
+        </testcase>
+        <testcase classname="src/__tests__/services.api.test.js" name="API client &gt; headers básicos POST /api/books" time="0.0001023">
+        </testcase>
+        <testcase classname="src/__tests__/services.api.test.js" name="API client &gt; headers básicos PUT /api/books/1" time="0.0000881">
+        </testcase>
+        <testcase classname="src/__tests__/services.api.test.js" name="API client &gt; headers básicos DELETE /api/books/1" time="0.0000857">
+        </testcase>
+    </testsuite>
+</testsuites>

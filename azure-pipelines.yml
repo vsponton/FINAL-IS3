@@ -1,4 +1,4 @@
-trigger:
+﻿trigger:
   - main
 
 pool:
@@ -68,6 +68,14 @@ stages:
             reportDirectory: '$(System.DefaultWorkingDirectory)/frontend/coverage'
             failIfCoverageEmpty: false
 
+        - task: PublishTestResults@2
+          displayName: 'Frontend • Publicar resultados de tests'
+          condition: always()
+          inputs:
+            testResultsFormat: 'JUnit'
+            testResultsFiles: 'frontend/test-results/junit.xml'
+            testRunTitle: 'Frontend - Vitest'
+
         # Backend: tests unitarios y cobertura
         - script: |
             set -e
@@ -84,6 +92,14 @@ stages:
             summaryFileLocation: '$(System.DefaultWorkingDirectory)/backend/coverage/cobertura-coverage.xml'
             reportDirectory: '$(System.DefaultWorkingDirectory)/backend/coverage'
             failIfCoverageEmpty: false
+
+        - task: PublishTestResults@2
+          displayName: 'Backend • Publicar resultados de tests'
+          condition: always()
+          inputs:
+            testResultsFormat: 'JUnit'
+            testResultsFiles: 'backend/test-results/junit.xml'
+            testRunTitle: 'Backend - Jest'
 
         - task: SonarCloudAnalyze@3
           displayName: 'Sonar • Analyze'
