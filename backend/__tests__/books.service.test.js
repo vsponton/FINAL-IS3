@@ -10,7 +10,7 @@ const svc = {
 
 beforeEach(()=>Object.values(repo).forEach(fn=>fn.mockReset()))
 
-test('list ok', async ()=>{ repo.list.mockResolvedValue([{id:1}]); expect((await svc.list()).length).toBe(1) })
+test('list ok', async ()=>{ repo.list.mockResolvedValue([{id:1}]); expect(await svc.list()).toHaveLength(1) })
 test('get ok', async ()=>{ repo.get.mockResolvedValue({id:1}); expect((await svc.get(1)).id).toBe(1) })
 test('get bad id', async ()=>{ await expect(svc.get('a')).rejects.toThrow('bad id') })
 test('get not found', async ()=>{ repo.get.mockResolvedValue(null); await expect(svc.get(9)).rejects.toThrow('not found') })

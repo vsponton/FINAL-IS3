@@ -8,6 +8,11 @@ describe("Health", () => {
   });
 });
 
-// backend/__tests__/health.test.js
-test('suma tonta', ()=>{ expect(1+1).toBe(2) })
-test('env test', ()=>{ process.env.NODE_ENV = 'test'; expect(process.env.NODE_ENV).toBe('test') })
+test('GET /health no expone X-Powered-By', async () => {
+  const res = await request(app).get('/health');
+  expect(res.headers['x-powered-by']).toBeUndefined();
+});
+test('ruta inexistente devuelve 404', async () => {
+  const res = await request(app).get('/ruta-que-no-existe');
+  expect(res.status).toBe(404);
+});

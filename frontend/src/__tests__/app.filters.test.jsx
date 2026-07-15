@@ -17,6 +17,7 @@ describe('App filters and views', () => {
     fetch.mockResolvedValueOnce(ok([{ id: 1, book_title: 'X', borrower_name: 'Ana', borrower_email: '', start_date: Date.now(), due_date: Date.now(), status: 'ok' }]))
     fireEvent.click(screen.getByRole('button', { name: /Préstamos/i }))
     await screen.findByText('X')
+    expect(screen.getByText('X')).toBeInTheDocument()
   })
 
   it('cambia a Ventas y carga lista', async () => {
@@ -26,6 +27,7 @@ describe('App filters and views', () => {
     fetch.mockResolvedValueOnce(ok([{ id: 1, book_title: 'Y', buyer_name: 'Luis', quantity: 1, total_price: 10, sale_date: Date.now() }]))
     fireEvent.click(screen.getByRole('button', { name: /Ventas/i }))
     await screen.findByText('Y')
+    expect(screen.getByText('Y')).toBeInTheDocument()
   })
 
   it('error cargando préstamos alerta', async () => {

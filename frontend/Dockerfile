@@ -17,7 +17,7 @@ COPY . .
 ARG VITE_API_URL
 ENV VITE_API_URL=${VITE_API_URL}
 # Vite lee import.meta.env.VITE_API_URL en tiempo de build
-RUN VITE_API_URL=$VITE_API_URL npm run build
+RUN VITE_API_URL="${VITE_API_URL}" npm run build
 
 # Etapa 2: nginx no-root para servir estáticos.
 # nginxinc/nginx-unprivileged corre como usuario nginx (UID 101), sin root.

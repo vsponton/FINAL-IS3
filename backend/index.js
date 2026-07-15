@@ -219,7 +219,7 @@ async function updateBook(req, res) {
 
 async function loanBook(req, res) {
   try {
-    const bookId = parseInt(req.params.id, 10);
+    const bookId = Number.parseInt(req.params.id, 10);
     const { borrowerName, borrowerEmail, days } = req.body;
 
     if (!borrowerName || !days || Number(days) <= 0) {
@@ -277,7 +277,7 @@ async function loanBook(req, res) {
 
 async function sellBook(req, res) {
   try {
-    const bookId = parseInt(req.params.id, 10);
+    const bookId = Number.parseInt(req.params.id, 10);
     const { buyerName, quantity } = req.body;
 
     if (!buyerName || !quantity || Number(quantity) <= 0) {

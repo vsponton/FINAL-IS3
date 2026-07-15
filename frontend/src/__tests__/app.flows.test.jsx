@@ -18,6 +18,7 @@ describe('App flows', () => {
     fetch.mockResolvedValueOnce(ok([]))
     render(<App />)
     await screen.findByText(/No hay libros cargados/i)
+    expect(screen.getByText(/No hay libros cargados/i)).toBeInTheDocument()
   })
 
   it('alerta si falla carga de libros', async () => {
@@ -57,6 +58,7 @@ describe('App flows', () => {
     fetch.mockResolvedValueOnce(ok({ id: 1, title: 'Libro X', author: 'Autora', year: 2024, stock: 0, price: 0 }))
     fireEvent.click(screen.getByRole('button', { name: /Agregar libro/i }))
     await screen.findByText('Libro X')
+    expect(screen.getByText('Libro X')).toBeInTheDocument()
   })
 
   it('no envía si faltan campos requeridos', async () => {
@@ -78,6 +80,7 @@ describe('App flows', () => {
     fireEvent.change(screen.getByLabelText(/^Año$/i), { target: { value: '2001' } })
     fireEvent.click(screen.getByRole('button', { name: /Guardar cambios/i }))
     await screen.findByText('A2')
+    expect(screen.getByText('A2')).toBeInTheDocument()
   })
 
   it('borra libro tras confirmar', async () => {

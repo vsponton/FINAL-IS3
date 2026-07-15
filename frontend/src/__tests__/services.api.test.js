@@ -17,7 +17,7 @@ describe('API client', () => {
   test('list OK', async () => {
     fetch.mockImplementationOnce(() => ok([{ id: 1 }]));
     const res = await API.list();
-    expect(res.length).toBe(1);
+    expect(res).toHaveLength(1);
   });
 
   test('create OK', async () => {
