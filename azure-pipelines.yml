@@ -7,25 +7,32 @@ pool:
 variables:
   - name: NODE_VERSION
     value: '20'
+
   - name: REGISTRY
     value: 'ghcr.io'
+
   - name: GITHUB_ACTOR
     value: 'vsponton'
+
   - name: DEPLOY_RENDER
     value: 'true'
+
   - group: SONAR_TOKEN
   - group: GHCR_SECRETS
-  - group: RENDER_HOOKS   # INCLUYE: BACK_QA_URL, BACK_PROD_URL, FRONT_QA_URL, HOOKS
+  - group: RENDER_HOOKS
 
-# ───────────────────────────────────────────
-# 1) CI: Tests + Sonar
-# ───────────────────────────────────────────
+# =========================================================
+# 1) CI: TESTS UNITARIOS + COBERTURA + SONARCLOUD
+# =========================================================
 stages:
+
 - stage: CI
   displayName: 'CI: Tests + Sonar'
+
   jobs:
     - job: quality
       displayName: 'Quality'
+
       steps:
         - checkout: self
           clean: true
@@ -44,84 +51,99 @@ stages:
             scannerMode: 'CLI'
             configMode: 'file'
 
-        # Frontend tests + coverage
+        # Frontend: tests unitarios y cobertura
         - script: |
             set -e
             cd frontend
             npm ci
-            npm run test:cov || echo "Vitest warnings, continuamos..."
+            npm run test:cov
           displayName: 'Frontend • Vitest + Coverage'
 
         - task: PublishCodeCoverageResults@2
           displayName: 'Frontend • Publicar Coverage'
+          condition: always()
           inputs:
             codeCoverageTool: Cobertura
-            summaryFileLocation: 'frontend/coverage/cobertura-coverage.xml'
-            reportDirectory: 'frontend/coverage'
+            summaryFileLocation: '$(System.DefaultWorkingDirectory)/frontend/coverage/cobertura-coverage.xml'
+            reportDirectory: '$(System.DefaultWorkingDirectory)/frontend/coverage'
             failIfCoverageEmpty: false
-          condition: always()
 
-        # Backend tests + coverage
+        # Backend: tests unitarios y cobertura
         - script: |
             set -e
             cd backend
             npm ci
-            npm run test:cov || echo "Jest warnings, continuamos..."
+            npm run test:cov
           displayName: 'Backend • Jest + Coverage'
 
         - task: PublishCodeCoverageResults@2
           displayName: 'Backend • Publicar Coverage'
+          condition: always()
           inputs:
             codeCoverageTool: Cobertura
-            summaryFileLocation: 'backend/coverage/cobertura-coverage.xml'
-            reportDirectory: 'backend/coverage'
+            summaryFileLocation: '$(System.DefaultWorkingDirectory)/backend/coverage/cobertura-coverage.xml'
+            reportDirectory: '$(System.DefaultWorkingDirectory)/backend/coverage'
             failIfCoverageEmpty: false
-          condition: always()
 
         - task: SonarCloudAnalyze@3
+          displayName: 'Sonar • Analyze'
+
         - task: SonarCloudPublish@3
+          displayName: 'Sonar • Publish'
           inputs:
             pollingTimeoutSec: '300'
 
-# ───────────────────────────────────────────
-# 2) QA: Build + Push + Deploy
-# ───────────────────────────────────────────
+
+# =========================================================
+# 2) QA: BUILD + PUSH + DEPLOY + PRUEBAS DE INTEGRACIÓN
+# =========================================================
 - stage: QA
   displayName: 'QA: Build & Push (+ Deploy)'
   dependsOn: CI
   condition: succeeded()
+
   jobs:
     - job: build_push_qa
       displayName: 'Build & Push (latest + sha) + Deploy QA'
+
       steps:
         - checkout: self
           clean: true
 
-        # Login a GHCR
+        # Login en GitHub Container Registry
         - bash: |
-            echo "$GHCR_TOKEN" | docker login "$REGISTRY" -u "$GHCR_USERNAME" --password-stdin
+            echo "$GHCR_TOKEN" | docker login "$REGISTRY" \
+              -u "$GHCR_USERNAME" \
+              --password-stdin
           displayName: 'Login GHCR'
           env:
             GHCR_TOKEN: $(GHCR_TOKEN)
             GHCR_USERNAME: $(GHCR_USERNAME)
 
-        # Short SHA
+        # Calcular SHA corto del commit
         - bash: |
-            SHORT_SHA="$(echo $(Build.SourceVersion) | cut -c1-7)"
+            SHORT_SHA="$(echo "$(Build.SourceVersion)" | cut -c1-7)"
             echo "SHORT_SHA=$SHORT_SHA" > meta.txt
+            echo "SHA generado: $SHORT_SHA"
           displayName: 'Compute short sha'
 
-        # Backend build
+        # Build y push del backend
         - bash: |
             SHA="$(grep SHORT_SHA meta.txt | cut -d'=' -f2)"
-            docker build -t $(REGISTRY)/$(GITHUB_ACTOR)/books-backend:latest \
-                          -t $(REGISTRY)/$(GITHUB_ACTOR)/books-backend:sha-$SHA \
-                          backend
-            docker push $(REGISTRY)/$(GITHUB_ACTOR)/books-backend:latest
-            docker push $(REGISTRY)/$(GITHUB_ACTOR)/books-backend:sha-$SHA
+
+            docker build \
+              -t $(REGISTRY)/$(GITHUB_ACTOR)/books-backend:latest \
+              -t $(REGISTRY)/$(GITHUB_ACTOR)/books-backend:sha-$SHA \
+              backend
+
+            docker push \
+              $(REGISTRY)/$(GITHUB_ACTOR)/books-backend:latest
+
+            docker push \
+              $(REGISTRY)/$(GITHUB_ACTOR)/books-backend:sha-$SHA
           displayName: 'Backend • Build & Push'
 
-        # Frontend build (inyectando la API de QA)
+        # Build y push del frontend para QA
         - bash: |
             SHA="$(grep SHORT_SHA meta.txt | cut -d'=' -f2)"
 
@@ -131,75 +153,161 @@ stages:
               -t $(REGISTRY)/$(GITHUB_ACTOR)/books-frontend:sha-$SHA \
               frontend
 
-            docker push $(REGISTRY)/$(GITHUB_ACTOR)/books-frontend:latest
-            docker push $(REGISTRY)/$(GITHUB_ACTOR)/books-frontend:sha-$SHA
+            docker push \
+              $(REGISTRY)/$(GITHUB_ACTOR)/books-frontend:latest
+
+            docker push \
+              $(REGISTRY)/$(GITHUB_ACTOR)/books-frontend:sha-$SHA
           displayName: 'Frontend QA • Build (VITE_API_URL) & Push'
 
-        # Deploy QA a Render
+        # Disparar deploy automático en Render QA
         - bash: |
             if [ -z "$RENDER_QA_HOOK_FRONT" ] || [ -z "$RENDER_QA_HOOK_BACK" ]; then
-              echo "Saltando deploy QA: faltan hooks"
-              exit 0
+              echo "Faltan los Deploy Hooks de Render QA"
+              exit 1
             fi
 
-            echo "🚀 Trigger Render FRONT QA"
-            curl -fsS -X POST "$RENDER_QA_HOOK_FRONT"
-
-            echo "🚀 Trigger Render BACK QA"
+            echo "Trigger Render BACK QA"
             curl -fsS -X POST "$RENDER_QA_HOOK_BACK"
+
+            echo "Trigger Render FRONT QA"
+            curl -fsS -X POST "$RENDER_QA_HOOK_FRONT"
           displayName: 'Deploy QA (Render)'
           env:
             RENDER_QA_HOOK_FRONT: $(RENDER_QA_HOOK_FRONT)
             RENDER_QA_HOOK_BACK: $(RENDER_QA_HOOK_BACK)
 
-# ───────────────────────────────────────────
-# 3) PROD: Approval → Promote + Deploy
-# ───────────────────────────────────────────
+        # Esperar hasta que el backend QA termine de desplegar
+        - bash: |
+            echo "Esperando que el backend QA esté disponible..."
+
+            for i in {1..30}; do
+              echo "Intento $i de 30"
+
+              if curl -fsS "$(BACK_QA_URL)/health"; then
+                echo ""
+                echo "Backend QA disponible"
+                exit 0
+              fi
+
+              sleep 10
+            done
+
+            echo "El backend QA no respondió después de 30 intentos"
+            exit 1
+          displayName: 'Esperar backend QA'
+
+        # Pruebas de integración contra el entorno QA desplegado
+        - bash: |
+            echo "Probando endpoint /health"
+
+            HEALTH_STATUS=$(curl \
+              -s \
+              -o /dev/null \
+              -w "%{http_code}" \
+              "$(BACK_QA_URL)/health")
+
+            echo "Código recibido en /health: $HEALTH_STATUS"
+
+            if [ "$HEALTH_STATUS" != "200" ]; then
+              echo "Falló la prueba de integración de /health"
+              exit 1
+            fi
+
+            echo "Probando endpoint /api/books"
+
+            BOOKS_STATUS=$(curl \
+              -s \
+              -o /dev/null \
+              -w "%{http_code}" \
+              "$(BACK_QA_URL)/api/books")
+
+            echo "Código recibido en /api/books: $BOOKS_STATUS"
+
+            if [ "$BOOKS_STATUS" != "200" ]; then
+              echo "Falló la prueba de integración de /api/books"
+              exit 1
+            fi
+
+            echo "Pruebas de integración aprobadas"
+          displayName: 'QA • Pruebas de integración'
+
+
+# =========================================================
+# 3) PROD: APROBACIÓN MANUAL + PROMOCIÓN + DEPLOY
+# =========================================================
 - stage: PROD
   displayName: 'PROD: Approval → Promote & Deploy'
   dependsOn: QA
   condition: succeeded()
+
   jobs:
     - deployment: promote_prod
       displayName: 'Promote + Deploy PROD'
       environment: 'prod'
+
       strategy:
         runOnce:
           deploy:
             steps:
               - checkout: self
+                clean: true
 
-              # Login GHCR
+              # Login en GitHub Container Registry
               - bash: |
-                  echo "$GHCR_TOKEN" | docker login "$REGISTRY" -u "$GHCR_USERNAME" --password-stdin
+                  echo "$GHCR_TOKEN" | docker login "$REGISTRY" \
+                    -u "$GHCR_USERNAME" \
+                    --password-stdin
+                displayName: 'Login GHCR'
                 env:
                   GHCR_TOKEN: $(GHCR_TOKEN)
                   GHCR_USERNAME: $(GHCR_USERNAME)
 
-              # Promote backend latest → prod
+              # Calcular el SHA del mismo commit validado en QA
               - bash: |
-                  docker pull $(REGISTRY)/$(GITHUB_ACTOR)/books-backend:latest
-                  docker tag $(REGISTRY)/$(GITHUB_ACTOR)/books-backend:latest $(REGISTRY)/$(GITHUB_ACTOR)/books-backend:prod
-                  docker push $(REGISTRY)/$(GITHUB_ACTOR)/books-backend:prod
-                displayName: 'Backend • Promote'
+                  SHORT_SHA="$(echo "$(Build.SourceVersion)" | cut -c1-7)"
+                  echo "SHORT_SHA=$SHORT_SHA" > meta.txt
+                  echo "SHA a promover: $SHORT_SHA"
+                displayName: 'Compute short sha PROD'
 
-              # Build frontend para PROD con su API
+              # Promover el backend validado por SHA a PROD
+              - bash: |
+                  SHA="$(grep SHORT_SHA meta.txt | cut -d'=' -f2)"
+
+                  docker pull \
+                    $(REGISTRY)/$(GITHUB_ACTOR)/books-backend:sha-$SHA
+
+                  docker tag \
+                    $(REGISTRY)/$(GITHUB_ACTOR)/books-backend:sha-$SHA \
+                    $(REGISTRY)/$(GITHUB_ACTOR)/books-backend:prod
+
+                  docker push \
+                    $(REGISTRY)/$(GITHUB_ACTOR)/books-backend:prod
+                displayName: 'Backend • Promote SHA → PROD'
+
+              # Build y push del frontend para Producción
               - bash: |
                   docker build \
                     --build-arg VITE_API_URL=$(BACK_PROD_URL) \
                     -t $(REGISTRY)/$(GITHUB_ACTOR)/books-frontend:prod \
                     frontend
 
-                  docker push $(REGISTRY)/$(GITHUB_ACTOR)/books-frontend:prod
+                  docker push \
+                    $(REGISTRY)/$(GITHUB_ACTOR)/books-frontend:prod
                 displayName: 'Frontend PROD • Build (VITE_API_URL) & Push'
 
-              # Deploy PROD en Render
+              # Disparar deploy en Render Producción
               - bash: |
-                  echo "🚀 Trigger FRONT PROD"
-                  curl -fsS -X POST "$RENDER_PROD_HOOK_FRONT"
+                  if [ -z "$RENDER_PROD_HOOK_FRONT" ] || [ -z "$RENDER_PROD_HOOK_BACK" ]; then
+                    echo "Faltan los Deploy Hooks de Render PROD"
+                    exit 1
+                  fi
 
-                  echo "🚀 Trigger BACK PROD"
+                  echo "Trigger Render BACK PROD"
                   curl -fsS -X POST "$RENDER_PROD_HOOK_BACK"
+
+                  echo "Trigger Render FRONT PROD"
+                  curl -fsS -X POST "$RENDER_PROD_HOOK_FRONT"
                 displayName: 'Deploy PROD (Render)'
                 env:
                   RENDER_PROD_HOOK_FRONT: $(RENDER_PROD_HOOK_FRONT)
